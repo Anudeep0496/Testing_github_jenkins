@@ -1,0 +1,22 @@
+version: '3.7'
+services:
+  jenkins:
+    build:
+      context: ./jenkins
+    ports:
+      - "8080:8080"
+      - "50000:50000"
+    volumes:
+      - jenkins_home:/var/jenkins_home
+      - ./java-app:/var/jenkins_home/workspace/java-app
+    environment:
+      - JAVA_OPTS=-Djenkins.install.runSetupWizard=false
+  java-app:
+    build:
+      context: ./java-app
+    image: java-app:latest
+    volumes:
+      - ./java-app:/usr/src/app
+    command: ["java", "-jar", "/usr/src/app/App.jar"]
+volumes:
+  jenkins_home:
